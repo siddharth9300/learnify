@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Footer from "../components/Footer";
-const PORT = import.meta.env.VITE_PORT || 3000;
 
 const Home = () => {
   return (
@@ -9,7 +8,7 @@ const Home = () => {
     <div className="h-screen flex flex-col items-center justify-center bg-gradient-to-r from-blue-600 to-purple-700 text-white text-center dark:bg-gradient-to-r dark:from-gray-800 dark:to-gray-900 dark:text-gray-200"> {/* Added dark mode styles */}
       <h1 className="text-5xl font-extrabold mb-4">Welcome to the Online Learning Platform</h1>
       <p className="text-lg mb-8 max-w-2xl">
-        Learn from the best instructors, explore a variety of courses, and enhance your skills at your own pace. {PORT}
+        Learn from the best instructors, explore a variety of courses, and enhance your skills at your own pace. 
       </p>
 
       <div className="space-x-6">
