@@ -32,7 +32,7 @@ lerna-debug.log*
 # Environment configuration files
 .env
 .env.*
-
+!/.env.example
 
 # OS generated files
 Thumbs.db
