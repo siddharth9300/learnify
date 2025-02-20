@@ -3,7 +3,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
-
+const PORT = import.meta.env.VITE_PORT || 5000;
 const Courses = () => {
   const [courses, setCourses] = useState([]);
   const [enrolledCourses, setEnrolledCourses] = useState([]);
@@ -18,7 +18,7 @@ const Courses = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const result = await axios.get("http://localhost:5000/api/courses");
+        const result = await axios.get(`http://localhost:${PORT}/api/courses`);
         setCourses(result.data);
       } catch (error) {
         toast.error("Failed to fetch courses.");
@@ -31,7 +31,7 @@ const Courses = () => {
       try {
         const token = localStorage.getItem("token");
         const config = { headers: { Authorization: `Bearer ${token}` } };
-        const result = await axios.get("http://localhost:5000/api/users/profile", config);
+        const result = await axios.get(`http://localhost:${PORT}/api/users/profile`, config);
         console.log("Fetched enrolled courses:", result.data.enrolledCourses.map(course => course._id));
         setEnrolledCourses(result.data.enrolledCourses.map(course => course._id));
       } catch (error) {
@@ -49,7 +49,7 @@ const Courses = () => {
     try {
       const token = localStorage.getItem("token");
       const config = { headers: { Authorization: `Bearer ${token}` } };
-      const url = `http://localhost:5000/api/courses/${action}`;
+      const url = `http://localhost:${PORT}/api/courses/${action}`;
       const response = await axios.post(url, { courseId }, config);
 
       if (action === "enroll") {
@@ -79,7 +79,7 @@ const Courses = () => {
     try {
       const token = localStorage.getItem("token");
       const config = { headers: { Authorization: `Bearer ${token}` } };
-      await axios.delete(`http://localhost:5000/api/courses/${deleteCourseId}`, config);
+      await axios.delete(`http://localhost:${PORT}/api/courses/${deleteCourseId}`, config);
       toast.success("Course deleted successfully!");
       setCourses(courses.filter((course) => course._id !== deleteCourseId));
       setShowModal(false);
@@ -113,7 +113,7 @@ const Courses = () => {
               onClick={() => navigate(`/courses/${course._id}/lectures`)}
             >
          <img
-  src={`http://localhost:5000/${course.thumbnail}`}
+  src={`http://localhost:${PORT}/${course.thumbnail}`}
   alt={course.title}
   className="w-full h-48 object-contain bg-gray-900"
 />

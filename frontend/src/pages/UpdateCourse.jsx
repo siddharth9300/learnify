@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
-
+const PORT = import.meta.env.VITE_PORT || 5000;
 const UpdateCourse = () => {
   const { courseId } = useParams();
   const [title, setTitle] = useState("");
@@ -15,13 +15,13 @@ const UpdateCourse = () => {
 
   useEffect(() => {
     const fetchCourse = async () => {
-      const result = await axios.get(`http://localhost:5000/api/courses/${courseId}`);
+      const result = await axios.get(`http://localhost:${PORT}/api/courses/${courseId}`);
       const course = result.data;
       setTitle(course.title);
       setDescription(course.description);
       setCategory(course.category);
       setDuration(course.duration);
-      setThumbnailPreview(`http://localhost:5000/${course.thumbnail}`);
+      setThumbnailPreview(`http://localhost:${PORT}/${course.thumbnail}`);
     };
     fetchCourse();
   }, [courseId]);
@@ -45,7 +45,7 @@ const UpdateCourse = () => {
         formData.append("thumbnail", thumbnail);
       }
 
-      await axios.put(`http://localhost:5000/api/courses/${courseId}`, formData, config);
+      await axios.put(`http://localhost:${PORT}/api/courses/${courseId}`, formData, config);
       toast.success("Course updated successfully!");
       navigate("/courses");
     } catch (error) {

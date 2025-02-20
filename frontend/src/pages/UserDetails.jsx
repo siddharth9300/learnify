@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import toast from "react-hot-toast";
-
+const PORT = import.meta.env.VITE_PORT || 5000;
 const UserDetails = () => {
   const { userId } = useParams();
   const [user, setUser] = useState(null);
@@ -10,7 +10,7 @@ const UserDetails = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const result = await axios.get(`http://localhost:5000/api/users/${userId}`);
+        const result = await axios.get(`http://localhost:${PORT}/api/users/${userId}`);
         setUser(result.data);
         toast.success("User details fetched successfully!");
       } catch (error) {

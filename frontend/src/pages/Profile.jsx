@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
-
+const PORT = import.meta.env.VITE_PORT || 5000;
 const Profile = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -15,7 +15,7 @@ const Profile = () => {
             Authorization: `Bearer ${token}`,
           },
         };
-        const result = await axios.get("http://localhost:5000/api/users/profile", config);
+        const result = await axios.get(`http://localhost:${PORT}/api/users/profile`, config);
         setUser(result.data);
         toast.dismiss();
         toast.success("Profile fetched successfully!");

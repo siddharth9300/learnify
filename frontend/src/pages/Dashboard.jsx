@@ -9,7 +9,7 @@ import {
   FaChalkboardTeacher,
 } from "react-icons/fa";
 import Footer from "../components/Footer"; 
-
+const PORT = import.meta.env.VITE_PORT || 5000;
 const Dashboard = () => {
   const [data, setData] = useState({});
   const [enrolledCourses, setEnrolledCourses] = useState([]);
@@ -22,7 +22,7 @@ const Dashboard = () => {
       const config = { headers: { Authorization: `Bearer ${token}` } };
       try {
         const dashboardRes = await axios.get(
-          "http://localhost:5000/api/dashboard",
+          `http://localhost:${PORT}/api/dashboard`,
           config
         );
         setData(dashboardRes.data);
@@ -90,7 +90,7 @@ const Dashboard = () => {
                     onClick={() => navigate(`/courses/${course._id}/lectures`)}
                   >
                     <img
-                      src={`http://localhost:5000/${course.thumbnail}`}
+                      src={`http://localhost:${PORT}/${course.thumbnail}`}
                       alt={course.title}
                       className="w-full h-48 object-contain bg-gray-900"
                     />

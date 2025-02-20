@@ -3,7 +3,7 @@ import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import Footer from "../components/Footer";
-
+const PORT = import.meta.env.VITE_PORT || 5000;
 const Lectures = () => {
   const { courseId } = useParams();
   const navigate = useNavigate();
@@ -16,7 +16,7 @@ const Lectures = () => {
       try {
         const token = localStorage.getItem("token");
         const config = { headers: { Authorization: `Bearer ${token}` } };
-        const result = await axios.get(`http://localhost:5000/api/courses/${courseId}/lectures`, config);
+        const result = await axios.get(`http://localhost:${PORT}/api/courses/${courseId}/lectures`, config);
         setLectures(result.data);
         setIsAuthorized(true);
         toast.success("Lectures fetched successfully!");
@@ -66,7 +66,7 @@ const Lectures = () => {
                 <h2 className="text-xl font-semibold text-white mb-3">{lecture.title}</h2>
                 <div className="relative">
                   <video controls className="w-full h-48 object-cover rounded-lg border border-gray-600">
-                    <source src={`http://localhost:5000/${lecture.videoUrl}`} type="video/mp4" />
+                    <source src={`http://localhost:${PORT}/${lecture.videoUrl}`} type="video/mp4" />
                     Your browser does not support the video tag.
                   </video>
                 </div>

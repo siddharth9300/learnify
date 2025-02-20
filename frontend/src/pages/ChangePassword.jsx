@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-
+const PORT = import.meta.env.VITE_PORT || 5000;
 const ChangePassword = () => {
   const { userId } = useParams();
   const [oldPassword, setOldPassword] = useState("");
@@ -10,7 +10,7 @@ const ChangePassword = () => {
   const changePasswordHandler = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:5000/api/users/change-password/${userId}`, {
+      await axios.put(`http://localhost:${PORT}/api/users/change-password/${userId}`, {
         oldPassword,
         newPassword,
       });

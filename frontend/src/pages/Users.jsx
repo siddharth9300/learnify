@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import Footer from "../components/Footer";
-
+const PORT = import.meta.env.VITE_PORT || 5000;
 const Users = () => {
   const [users, setUsers] = useState([]);
   const [filter, setFilter] = useState("all");
@@ -13,7 +13,7 @@ const Users = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const result = await axios.get("http://localhost:5000/api/users");
+        const result = await axios.get(`http://localhost:${PORT}/api/users`);
         setUsers(result.data);
         toast.dismiss()
         toast.success("Users fetched successfully!");
@@ -33,7 +33,7 @@ const Users = () => {
   const deleteUserHandler = async () => {
     if (selectedUser && deleteInput === "delete") {
       try {
-        await axios.delete(`http://localhost:5000/api/users/${selectedUser._id}`);
+        await axios.delete(`http://localhost:${PORT}/api/users/${selectedUser._id}`);
         setUsers(users.filter(user => user._id !== selectedUser._id));
         setShowModal(false);
         toast.success("User deleted successfully!");

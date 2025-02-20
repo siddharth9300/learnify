@@ -10,7 +10,7 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("student");
   const navigate = useNavigate();
-
+  const PORT = import.meta.env.VITE_PORT || 5000;
   const registerHandler = async (e) => {
     e.preventDefault();
 
@@ -20,7 +20,7 @@ const Register = () => {
     }
 
     try {
-      await axios.post("http://localhost:5000/api/users/register", {
+      await axios.post(`http://localhost:${PORT}/api/users/register`, {
         name,
         email,
         password,

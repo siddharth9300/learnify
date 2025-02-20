@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-
+const PORT = import.meta.env.VITE_PORT || 5000;
 const AddLecture = () => {
   const { courseId } = useParams();
   const [title, setTitle] = useState("");
@@ -29,7 +29,7 @@ const AddLecture = () => {
       formData.append("title", title);
       formData.append("video", video);
 
-      await axios.post(`http://localhost:5000/api/courses/${courseId}/lectures`, formData, config);
+      await axios.post(`http://localhost:${PORT}/api/courses/${courseId}/lectures`, formData, config);
       toast.success("Lecture added successfully!");
       navigate(`/courses/${courseId}/lectures`);
     } catch (error) {

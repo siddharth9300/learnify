@@ -68,6 +68,7 @@ Learnify is a modern and comprehensive online learning platform designed for stu
     ```env
     MONGO_URI=<Your MongoDB Connection URI>
     JWT_SECRET=<Your JWT Secret Key>
+    ADMIN_TOKEN=your_admin_access_token  
     PORT=5000
     ```
 
