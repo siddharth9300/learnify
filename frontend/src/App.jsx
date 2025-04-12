@@ -16,6 +16,7 @@ import Dashboard from "./pages/Dashboard";
 import Lectures from "./pages/Lectures";
 import AddLecture from "./pages/AddLecture";
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 
 const PrivateRoute = ({ children, role }) => {
   const token = localStorage.getItem("token");
@@ -44,6 +45,7 @@ const App = () => {
         <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
         <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
       </Routes>
+      <Footer />
     </Router>
   );
 };
