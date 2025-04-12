@@ -2,15 +2,15 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import toast from "react-hot-toast";
-const PORT = import.meta.env.VITE_PORT || 5000;
-const UserDetails = () => {
+// const PORT = import.meta.env.VITE_PORT || 5000;
+const SERVER_URL = import.meta.env.VITE_SERVER_URL;const UserDetails = () => {
   const { userId } = useParams();
   const [user, setUser] = useState(null);
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const result = await axios.get(`http://localhost:${PORT}/api/users/${userId}`);
+        const result = await axios.get(`${SERVER_URL}/api/users/${userId}`);
         setUser(result.data);
         toast.success("User details fetched successfully!");
       } catch (error) {

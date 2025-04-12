@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import toast from "react-hot-toast";
-const PORT = import.meta.env.VITE_PORT || 5000;
-const UpdateUser = () => {
+// const PORT = import.meta.env.VITE_PORT || 5000;
+const SERVER_URL = import.meta.env.VITE_SERVER_URL;const UpdateUser = () => {
   const { userId } = useParams();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -12,7 +12,7 @@ const UpdateUser = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const result = await axios.get(`http://localhost:${PORT}/api/users/${userId}`);
+        const result = await axios.get(`${SERVER_URL}/api/users/${userId}`);
         setName(result.data.name);
         setEmail(result.data.email);
       } catch (error) {
@@ -25,7 +25,7 @@ const UpdateUser = () => {
   const updateUserHandler = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:${PORT}/api/users/${userId}`, {
+      await axios.put(`${SERVER_URL}/api/users/${userId}`, {
         name,
         email,
         password,

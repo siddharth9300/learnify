@@ -10,12 +10,12 @@ exports.registerUser = async (req, res) => {
   if (userExists) return res.status(400).json({ message: "User already exists" });
 
   // Remove the check for the admin token
-  // if (role === 'admin') {
-  //   const adminToken = req.headers['x-admin-token'];
-  //   if (!adminToken || adminToken !== process.env.ADMIN_TOKEN) {
-  //     return res.status(403).json({ message: "Not authorized to create admin account" });
-  //   }
-  // }
+  if (role === 'admin') {
+    const adminToken = req.headers['x-admin-token'];
+    if (!adminToken || adminToken !== process.env.ADMIN_TOKEN) {
+      return res.status(403).json({ message: "Not authorized to create admin account" });
+    }
+  }
 
   const hashedPassword = await bcrypt.hash(password, 10);
   const user = await User.create({ name, email, password: hashedPassword, role });

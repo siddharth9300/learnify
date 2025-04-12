@@ -1,2 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Tiro+Devanagari+Hindi:ital@0;1&display=swap');
 
+/* :root {
+  --font-family: 'DM Sans', sans-serif;
+  --font-size: 16px;
+  --line-height: 1.5;
+  --color-primary: #4a90e2;
+  --color-secondary: #50e3c2;
+  --color-accent: #f5a623;
+  --color-background: #f5f7fa;
+  --color-text: #333333;
+  --color-border: #e0e0e0;
+} */
+
+
+@theme {
+    --font : "DM Sans", "sans-serif"; 
+  }
 @import "tailwindcss";
+
+
+
+
+
+
+@custom-variant dark (&:where(.dark, .dark *));

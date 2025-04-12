@@ -9,7 +9,8 @@ const {
   enroll,
   unenroll,
   getLectures,
-  addLecture
+  addLecture,
+  getCourse
 } = require('../controllers/courseController');
 const { protect } = require('../middleware/authMiddleware');
 
@@ -17,6 +18,7 @@ const upload = multer({ dest: 'uploads/' }); // Configure multer
 
 // Routes
 router.get('/', getCourses);    // Fetch all courses
+router.get('/:courseId', protect, getCourse); // Fetch a single course
 router.post('/', protect, upload.single('thumbnail'), addCourse);   // Add a new course
 router.put('/:courseId', protect, upload.single('thumbnail'), updateCourse); // Update a course
 router.delete('/:courseId', protect, deleteCourse); // Delete a course

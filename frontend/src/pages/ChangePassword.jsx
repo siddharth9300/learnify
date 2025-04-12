@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-const PORT = import.meta.env.VITE_PORT || 5000;
-const ChangePassword = () => {
+// const PORT = import.meta.env.VITE_PORT || 5000;
+const SERVER_URL = import.meta.env.VITE_SERVER_URL;const ChangePassword = () => {
   const { userId } = useParams();
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -10,7 +10,7 @@ const ChangePassword = () => {
   const changePasswordHandler = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:${PORT}/api/users/change-password/${userId}`, {
+      await axios.put(`${SERVER_URL}/api/users/change-password/${userId}`, {
         oldPassword,
         newPassword,
       });
@@ -21,8 +21,8 @@ const ChangePassword = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#1e1e2e]">
-      <div className="bg-[#2a2a3c] p-8 rounded-lg shadow-lg w-96 text-white">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 text-gray-900 dark:bg-[#1e1e2e] dark:text-white">
+      <div className="bg-white p-8 rounded-lg shadow-lg w-96 dark:bg-[#2a2a3c]">
         <h1 className="text-2xl font-bold mb-6 text-center">Change Password</h1>
         <form onSubmit={changePasswordHandler}>
           <input
@@ -30,14 +30,14 @@ const ChangePassword = () => {
             placeholder="Old Password"
             value={oldPassword}
             onChange={(e) => setOldPassword(e.target.value)}
-            className="w-full p-3 mb-4 border border-gray-600 bg-[#1e1e2e] text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+            className="w-full p-3 mb-4 border border-gray-300 rounded-lg bg-gray-100 text-gray-900 dark:border-gray-600 dark:bg-[#1e1e2e] dark:text-white"
           />
           <input
             type="password"
             placeholder="New Password"
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
-            className="w-full p-3 mb-4 border border-gray-600 bg-[#1e1e2e] text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+            className="w-full p-3 mb-4 border border-gray-300 rounded-lg bg-gray-100 text-gray-900 dark:border-gray-600 dark:bg-[#1e1e2e] dark:text-white"
           />
           <button
             type="submit"

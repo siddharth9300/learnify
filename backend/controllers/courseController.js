@@ -73,14 +73,24 @@ exports.addLecture = async (req, res) => {
 // Add a new course
 exports.addCourse = async (req, res) => {
   const { title, description, category, duration, videos } = req.body;
-  const instructor = req.user.id; 
-  const thumbnail = req.file.path; 
-  const newCourse = new Course({ title, description, category, createdBy: instructor, duration, thumbnail, videos });
+  const instructor = req.user.id;
+  const thumbnail = req.file?.path; // Use optional chaining
+
+  const newCourse = new Course({
+    title,
+    description,
+    category,
+    createdBy: instructor,
+    duration,
+    thumbnail,
+    videos,
+  });
 
   try {
     await newCourse.save();
     res.status(201).json(newCourse);
   } catch (err) {
+    console.error("Error creating course:", err); // Debugging
     res.status(500).json({ message: err.message });
   }
 };
@@ -175,6 +185,23 @@ exports.unenroll = async (req, res) => {
     res.status(200).json({ user: updatedUser });
   } catch (err) {
     console.error("Error unenrolling from course:", err);
+    res.status(500).json({ message: err.message });
+  }
+};
+
+exports.getCourse = async (req, res) => {
+  const courseId = req.params.courseId;
+
+  console.log("Fetching course with ID:", courseId); // Debugging
+
+  try {
+    const course = await Course.findById(courseId).populate('createdBy', 'name email');
+    if (!course) {
+      return res.status(404).json({ message: 'Course not found' });
+    }
+    res.status(200).json(course);
+  } catch (err) {
+    console.error("Error fetching course:", err); // Debugging
     res.status(500).json({ message: err.message });
   }
 };

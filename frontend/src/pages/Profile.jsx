@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
-const PORT = import.meta.env.VITE_PORT || 5000;
+
+const SERVER_URL = import.meta.env.VITE_SERVER_URL;
+
 const Profile = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -15,7 +17,7 @@ const Profile = () => {
             Authorization: `Bearer ${token}`,
           },
         };
-        const result = await axios.get(`http://localhost:${PORT}/api/users/profile`, config);
+        const result = await axios.get(`${SERVER_URL}/api/users/profile`, config);
         setUser(result.data);
         toast.dismiss();
         toast.success("Profile fetched successfully!");
@@ -31,7 +33,7 @@ const Profile = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white">
+      <div className="min-h-screen flex items-center justify-center bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-white">
         <p className="text-lg animate-pulse">Loading profile...</p>
       </div>
     );
@@ -39,20 +41,26 @@ const Profile = () => {
 
   if (!user) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white">
+      <div className="min-h-screen flex items-center justify-center bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-white">
         <p className="text-lg text-red-500">Failed to load profile.</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-900 to-gray-800 text-white">
-      <div className="w-full max-w-md bg-gray-800 p-8 rounded-lg shadow-lg hover:shadow-2xl transition-shadow">
-        <h1 className="text-3xl font-bold mb-6 text-center text-orange-400">Profile</h1>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-white">
+      <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg hover:shadow-2xl transition-shadow dark:bg-gray-800">
+        <h1 className="text-3xl font-bold mb-6 text-center text-blue-600 dark:text-orange-400">Profile</h1>
         <div className="space-y-4">
-          <p className="text-lg"><strong className="text-gray-300">Name:</strong> {user.name}</p>
-          <p className="text-lg"><strong className="text-gray-300">Email:</strong> {user.email}</p>
-          <p className="text-lg"><strong className="text-gray-300">Role:</strong> {user.role}</p>
+          <p className="text-lg">
+            <strong className="text-gray-700 dark:text-gray-300">Name:</strong> {user.name}
+          </p>
+          <p className="text-lg">
+            <strong className="text-gray-700 dark:text-gray-300">Email:</strong> {user.email}
+          </p>
+          <p className="text-lg">
+            <strong className="text-gray-700 dark:text-gray-300">Role:</strong> {user.role}
+          </p>
         </div>
       </div>
     </div>

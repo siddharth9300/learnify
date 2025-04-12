@@ -2,14 +2,14 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import toast from "react-hot-toast";
-const PORT = import.meta.env.VITE_PORT || 5000;
-const DeleteUser = () => {
+// const PORT = import.meta.env.VITE_PORT || 5000;
+const SERVER_URL = import.meta.env.VITE_SERVER_URL;const DeleteUser = () => {
   const { userId } = useParams();
   const [message, setMessage] = useState("");
 
   const deleteUserHandler = async () => {
     try {
-      await axios.delete(`http://localhost:${PORT}/api/users/${userId}`);
+      await axios.delete(`${SERVER_URL}/api/users/${userId}`);
       setMessage("User deleted successfully!");
       toast.success("User deleted successfully!");
     } catch (error) {

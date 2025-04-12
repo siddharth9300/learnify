@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import Footer from "../components/Footer";
-const PORT = import.meta.env.VITE_PORT || 5000;
-const Users = () => {
+// const PORT = import.meta.env.VITE_PORT || 5000;
+const SERVER_URL = import.meta.env.VITE_SERVER_URL;const Users = () => {
   const [users, setUsers] = useState([]);
   const [filter, setFilter] = useState("all");
   const [showModal, setShowModal] = useState(false);
@@ -13,7 +13,7 @@ const Users = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const result = await axios.get(`http://localhost:${PORT}/api/users`);
+        const result = await axios.get(`${SERVER_URL}/api/users`);
         setUsers(result.data);
         toast.dismiss()
         toast.success("Users fetched successfully!");
@@ -33,7 +33,7 @@ const Users = () => {
   const deleteUserHandler = async () => {
     if (selectedUser && deleteInput === "delete") {
       try {
-        await axios.delete(`http://localhost:${PORT}/api/users/${selectedUser._id}`);
+        await axios.delete(`${SERVER_URL}/api/users/${selectedUser._id}`);
         setUsers(users.filter(user => user._id !== selectedUser._id));
         setShowModal(false);
         toast.success("User deleted successfully!");
@@ -106,22 +106,22 @@ const Users = () => {
 
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
-          <div className="bg-[#1e1e2e] p-5 rounded-lg shadow-lg w-80 text-center">
-            <h2 className="text-xl font-bold mb-3 text-white">Confirm Deletion</h2>
-            <p className="mb-3 text-gray-300">
-              Type <strong className="text-orange-500">"delete"</strong> to confirm:
+          <div className="bg-white dark:bg-gray-800 p-5 rounded-lg shadow-lg w-80 text-center">
+            <h2 className="text-xl font-bold mb-3 text-gray-900 dark:text-white">Confirm Deletion</h2>
+            <p className="mb-3 text-gray-700 dark:text-gray-300">
+              Type <strong className="text-orange-500 dark:text-orange-400">"delete"</strong> to confirm:
             </p>
             <input
               type="text"
               value={deleteInput}
               onChange={(e) => setDeleteInput(e.target.value)}
-              className="w-full p-2 border border-gray-600 bg-[#2a2a3a] text-white rounded-md mb-3 text-center text-lg"
+              className="w-full p-2 border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white rounded-md mb-3 text-center text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-orange-500"
               placeholder="Type here..."
             />
             <div className="flex justify-between">
               <button
                 onClick={() => setShowModal(false)}
-                className="w-1/2 bg-gray-600 text-white px-3 py-1 rounded-md hover:bg-gray-700"
+                className="w-1/2 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white px-3 py-1 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-all"
               >
                 Cancel
               </button>
@@ -130,7 +130,7 @@ const Users = () => {
                 className={`w-1/2 ml-2 px-3 py-1 rounded-md text-white ${
                   deleteInput === "delete"
                     ? "bg-orange-500 hover:bg-orange-600"
-                    : "bg-gray-500 cursor-not-allowed"
+                    : "bg-gray-400 dark:bg-gray-600 cursor-not-allowed"
                 }`}
                 disabled={deleteInput !== "delete"}
               >
