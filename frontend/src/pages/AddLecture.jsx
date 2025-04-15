@@ -57,6 +57,7 @@ const SERVER_URL = import.meta.env.VITE_SERVER_URL;const AddLecture = () => {
           <div className="mb-4">
             <input
               type="file"
+                accept="video/*"
               onChange={handleVideoChange}
               className="w-full p-3 mb-4 border border-gray-300 rounded-lg bg-gray-100 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 dark:focus:ring-orange-500"
             />

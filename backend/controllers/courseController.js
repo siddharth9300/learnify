@@ -52,12 +52,12 @@ exports.getLectures = async (req, res) => {
 exports.addLecture = async (req, res) => {
   const { title } = req.body;
   const courseId = req.params.courseId;
-  const videoUrl = req.file.path; 
+  const videoUrl = req.file?.path; 
 
   try {
     const course = await Course.findById(courseId);
     if (!course) {
-      return res.status(404).json({ message: 'Course not found' });
+      return res.status(404).json({ message: "Course not found" });
     }
 
     const newLecture = { title, videoUrl };
@@ -72,38 +72,46 @@ exports.addLecture = async (req, res) => {
 
 // Add a new course
 exports.addCourse = async (req, res) => {
-  const { title, description, category, duration, videos } = req.body;
+  const { title, description, category, duration, thumbnail } = req.body;
   const instructor = req.user.id;
-  const thumbnail = req.file?.path; // Use optional chaining
+
+  if (!title || !description || !category || !duration || !thumbnail) {
+    return res.status(400).json({ message: "All fields are required." });
+  }
+
+  // Parse duration to ensure it is a number
+  const parsedDuration = parseInt(duration, 10);
+  if (isNaN(parsedDuration)) {
+    return res.status(400).json({ message: "Duration must be a valid number." });
+  }
 
   const newCourse = new Course({
     title,
     description,
     category,
     createdBy: instructor,
-    duration,
+    duration: parsedDuration, // Store as a number
     thumbnail,
-    videos,
   });
 
   try {
     await newCourse.save();
     res.status(201).json(newCourse);
   } catch (err) {
-    console.error("Error creating course:", err); // Debugging
+    console.error("Error creating course:", err);
     res.status(500).json({ message: err.message });
   }
 };
 
 // Update a course
 exports.updateCourse = async (req, res) => {
-  const { title, description, category, duration, videos } = req.body;
+  const { title, description, category, duration, videos, thumbnail } = req.body;
   const courseId = req.params.courseId;
 
   try {
     const course = await Course.findById(courseId);
     if (!course) {
-      return res.status(404).json({ message: 'Course not found' });
+      return res.status(404).json({ message: "Course not found" });
     }
 
     course.title = title || course.title;
@@ -112,8 +120,8 @@ exports.updateCourse = async (req, res) => {
     course.duration = duration || course.duration;
     course.videos = videos || course.videos;
 
-    if (req.file) {
-      course.thumbnail = req.file.path;
+    if (thumbnail) {
+      course.thumbnail = thumbnail; // Update the thumbnail URL
     }
 
     await course.save();

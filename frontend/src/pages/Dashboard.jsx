@@ -37,7 +37,7 @@ const SERVER_URL = import.meta.env.VITE_SERVER_URL;const Dashboard = () => {
   return (
     <div className="flex flex-col min-h-screen bg-gray-100 text-gray-900 dark:bg-[#1e1e2e] dark:text-white">
       <div className="flex-grow p-8">
-        <h1 className="text-4xl font-bold mb-8 text-center text-orange-500 dark:text-orange-400">
+        <h1 className="mt-22 text-4xl font-bold mb-8 text-center text-orange-500 dark:text-orange-400">
           📊 Dashboard
         </h1>
 
@@ -90,7 +90,7 @@ const SERVER_URL = import.meta.env.VITE_SERVER_URL;const Dashboard = () => {
                     onClick={() => navigate(`/courses/${course._id}/lectures`)}
                   >
                     <img
-                      src={`${SERVER_URL}/${course.thumbnail}`}
+                      src={`${course.thumbnail}`}
                       alt={course.title}
                       className="w-full h-48 object-contain bg-gray-300 dark:bg-gray-900"
                     />
@@ -118,32 +118,32 @@ const SERVER_URL = import.meta.env.VITE_SERVER_URL;const Dashboard = () => {
         )}
 
         {role === "admin" && (
-          <div className="p-6 bg-gray-800 shadow-lg rounded-2xl mt-10">
-            <h2 className="text-3xl font-bold text-orange-400 flex items-center">
+          <div className="p-6 bg-gray-200 shadow-lg rounded-2xl mt-10 dark:bg-gray-800">
+            <h2 className="text-3xl font-bold text-orange-500 flex items-center dark:text-orange-400">
               <FaChalkboardTeacher className="mr-2" /> Admin Dashboard
             </h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-6">
-              <div className="bg-gray-900 p-6 rounded-2xl shadow-md text-center hover:shadow-2xl transition">
-                <FaBook className="text-4xl text-orange-500 mx-auto" />
-                <p className="text-gray-400 mt-2">Total Courses</p>
-                <h3 className="text-2xl font-bold text-orange-500">
+              <div className="bg-gray-300 p-6 rounded-2xl shadow-md text-center hover:shadow-2xl transition dark:bg-gray-900">
+                <FaBook className="text-4xl text-orange-500 mx-auto dark:text-orange-400" />
+                <p className="text-gray-700 mt-2 dark:text-gray-400">Total Courses</p>
+                <h3 className="text-2xl font-bold text-orange-500 dark:text-orange-400">
                   {data.totalCourses || 0}
                 </h3>
               </div>
 
-              <div className="bg-gray-900 p-6 rounded-2xl shadow-md text-center hover:shadow-2xl transition">
-                <FaUserGraduate className="text-4xl text-orange-500 mx-auto" />
-                <p className="text-gray-400 mt-2">Total Students</p>
-                <h3 className="text-2xl font-bold text-orange-500">
+              <div className="bg-gray-300 p-6 rounded-2xl shadow-md text-center hover:shadow-2xl transition dark:bg-gray-900">
+                <FaUserGraduate className="text-4xl text-orange-500 mx-auto dark:text-orange-400" />
+                <p className="text-gray-700 mt-2 dark:text-gray-400">Total Students</p>
+                <h3 className="text-2xl font-bold text-orange-500 dark:text-orange-400">
                   {data.totalStudents || 0}
                 </h3>
               </div>
 
-              <div className="bg-gray-900 p-6 rounded-2xl shadow-md text-center hover:shadow-2xl transition">
-                <FaChalkboardTeacher className="text-4xl text-orange-500 mx-auto" />
-                <p className="text-gray-400 mt-2">Total Instructors</p>
-                <h3 className="text-2xl font-bold text-orange-500">
+              <div className="bg-gray-300 p-6 rounded-2xl shadow-md text-center hover:shadow-2xl transition dark:bg-gray-900">
+                <FaChalkboardTeacher className="text-4xl text-orange-500 mx-auto dark:text-orange-400" />
+                <p className="text-gray-700 mt-2 dark:text-gray-400">Total Instructors</p>
+                <h3 className="text-2xl font-bold text-orange-500 dark:text-orange-400">
                   {data.totalInstructors || 0}
                 </h3>
               </div>

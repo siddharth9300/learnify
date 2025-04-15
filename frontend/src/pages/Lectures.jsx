@@ -43,8 +43,9 @@ const SERVER_URL = import.meta.env.VITE_SERVER_URL;const Lectures = () => {
   return (
     <div className="flex flex-col min-h-screen bg-gray-100 text-gray-900 dark:bg-[#1e1e2e] dark:text-white">
       <div className="min-h-screen bg-gray-100 text-gray-900 p-8 dark:bg-[#1e1e2e] dark:text-white">
-        <div className="max-w-5xl mx-auto">
-          <h1 className="text-4xl font-bold mb-6 text-center text-orange-500 dark:text-orange-400">Lectures</h1>
+        <div className="max-w-5xl mt-22 mx-auto">
+         
+          <h1 className="mt-22 text-4xl font-bold mb-6 text-center text-orange-500 dark:text-orange-400">Lectures</h1>
 
           {role === "instructor" && (
             <div className="flex justify-center mb-6">

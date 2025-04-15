@@ -100,7 +100,7 @@ const Home = () => {
               className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg hover:shadow-xl transition"
             >
               <img
-                src={`${SERVER_URL}/${course.thumbnail}`}
+                src={`${course.thumbnail}`}
                 alt={course.title}
                 className="w-full h-40 object-cover rounded-lg mb-4"
               />

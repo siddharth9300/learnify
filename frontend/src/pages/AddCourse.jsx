@@ -2,53 +2,90 @@ import React, { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-//  const PORT = import.meta.env.VITE_PORT || 5000;
+
 const SERVER_URL = import.meta.env.VITE_SERVER_URL;
+
 const AddCourse = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
   const [duration, setDuration] = useState("");
-  const [thumbnail, setThumbnail] = useState(null);
-  const [thumbnailPreview, setThumbnailPreview] = useState(null);
+  const [thumbnail, setThumbnail] = useState(null); // Store the selected file
+  const [thumbnailPreview, setThumbnailPreview] = useState(null); // Store the preview URL
   const navigate = useNavigate();
 
   const categories = ["Programming", "Design", "Marketing", "Business", "Photography"];
 
-  const addCourseHandler = async (e) => {
-    e.preventDefault();
-    try {
-      const token = localStorage.getItem("token");
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
-        },
-      };
-      const formData = new FormData();
-      formData.append("title", title);
-      formData.append("description", description);
-      formData.append("category", category);
-      formData.append("duration", duration);
-      formData.append("thumbnail", thumbnail);
+  const uploadToCloudinary = async (file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "lernify"); // Replace with your Cloudinary upload preset
+    formData.append("cloud_name", "dorlijqzl"); // Replace with your Cloudinary cloud name
 
-      await axios.post(`${SERVER_URL}/api/courses`, formData, config);
-      toast.success("Course added successfully!");
-      navigate("/courses");
+    try {
+      const response = await axios.post(
+        `https://api.cloudinary.com/v1_1/dorlijqzl/image/upload`,
+        formData
+      );
+      return response.data.secure_url; // Return the uploaded file's URL
     } catch (error) {
-      toast.error("Error adding course: " + error.response.data.message);
+      console.error("Error uploading to Cloudinary:", error);
+      throw error; // Throw the error to be caught in the calling function
     }
   };
 
   const handleThumbnailChange = (e) => {
     const file = e.target.files[0];
-    setThumbnail(file);
-    setThumbnailPreview(URL.createObjectURL(file));
+    if (!file) {
+      toast.error("No file selected.");
+      return;
+    }
+
+    setThumbnail(file); // Store the selected file
+    setThumbnailPreview(URL.createObjectURL(file)); // Generate a preview URL
+  };
+
+  const addCourseHandler = async (e) => {
+    e.preventDefault();
+
+    if (!thumbnail) {
+      toast.error("Please select a thumbnail.");
+      return;
+    }
+
+    try {
+      toast.loading("Uploading thumbnail...");
+      const thumbnailUrl = await uploadToCloudinary(thumbnail); // Upload the file to Cloudinary
+      toast.dismiss();
+
+      const token = localStorage.getItem("token");
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      const courseData = {
+        title,
+        description,
+        category,
+        duration,
+        thumbnail: thumbnailUrl, // Use the Cloudinary URL
+      };
+
+      await axios.post(`${SERVER_URL}/api/courses`, courseData, config);
+      toast.success("Course added successfully!");
+      navigate("/courses");
+    } catch (error) {
+      toast.dismiss();
+      console.error("Error adding course:", error);
+      toast.error("Failed to add course.");
+    }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 text-gray-900 dark:bg-[#1e1e2e] dark:text-white">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-96 dark:bg-[#2a2a3c]">
+      <div className="mt-22 bg-white p-8 rounded-lg shadow-lg w-96 dark:bg-[#2a2a3c]">
         <h1 className="text-2xl font-bold mb-6 text-center">Add New Course</h1>
         <form onSubmit={addCourseHandler}>
           <input
@@ -62,7 +99,7 @@ const AddCourse = () => {
             placeholder="Course Description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="w-full p-3 mb-4 border border-gray-300 rounded-lg bg-gray-100 text-gray-900 dark:border-gray-600 dark:bg-[#1e1e2e] dark:text-white"
+            className="w-full p-3 mb-4 border border-gray-300 rounded-lg bg-gray-100 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-[#1e1e2e] dark:text-white"
           />
           <select
             value={category}
@@ -77,25 +114,10 @@ const AddCourse = () => {
             ))}
           </select>
           <input
-            type="text"
+            type="number"
             placeholder="Duration (in hours)"
             value={duration}
-            onFocus={(e) => {
-              // Remove "hours" when the input is focused
-              if (duration.includes("hours")) {
-                setDuration(duration.replace(" hours", ""));
-              }
-            }}
-            onBlur={(e) => {
-              // Add "hours" back when the input loses focus
-              if (duration && !duration.includes("hours")) {
-                setDuration(`${duration} hours`);
-              }
-            }}
-            onChange={(e) => {
-              const value = e.target.value.replace(/[^0-9]/g, ""); // Allow only numbers
-              setDuration(value);
-            }}
+            onChange={(e) => setDuration(e.target.value)}
             className="w-full p-3 mb-4 border border-gray-300 rounded-lg bg-gray-100 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-[#1e1e2e] dark:text-white"
           />
           <input
@@ -104,7 +126,11 @@ const AddCourse = () => {
             className="w-full p-3 mb-4 border border-gray-300 rounded-lg bg-gray-100 text-gray-900 dark:border-gray-600 dark:bg-[#1e1e2e] dark:text-white"
           />
           {thumbnailPreview && (
-            <img src={thumbnailPreview} alt="Thumbnail Preview" className="mt-4 w-full h-auto rounded-lg" />
+            <img
+              src={thumbnailPreview}
+              alt="Thumbnail Preview"
+              className="mt-4 w-full h-auto rounded-lg"
+            />
           )}
           <button
             type="submit"

@@ -6,13 +6,14 @@ const connectDB = require("./config/db");
 const userRoutes = require('./routes/userRoutes');
 const courseRoutes = require('./routes/courseRoutes');
 const dashboardRoutes = require('./routes/dashboardRoutes');
+const app = express();
+app.use(express.json());
+app.use(cors());
 
 dotenv.config();
 connectDB();
 
-const app = express();
-app.use(express.json());
-app.use(cors());
+
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 

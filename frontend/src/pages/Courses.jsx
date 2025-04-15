@@ -103,7 +103,7 @@ const Courses = () => {
   return (
     <div className="flex flex-col min-h-screen bg-gray-100 text-gray-900 dark:bg-[#1e1e2e] dark:text-white">
       <div className="min-h-screen bg-gray-100 text-gray-900 p-8 dark:bg-[#1e1e2e] dark:text-white">
-        <h1 className="text-4xl font-bold mb-8 text-center text-orange-500 dark:text-orange-400">Available Courses</h1>
+        <h1 className="mt-22 text-4xl font-bold mb-8 text-center text-orange-500 dark:text-orange-400">Available Courses</h1>
 
       {courses.length === 0 ? (
         <p className="text-center text-gray-400 text-lg">No courses available.</p>
@@ -116,7 +116,7 @@ const Courses = () => {
               onClick={() => navigate(`/courses/${course._id}/lectures`)}
             >
               <img
-                src={`${SERVER_URL}/${course.thumbnail}`}
+                src={`${course.thumbnail}`}
                 alt={course.title}
                 className="w-full h-48 object-contain bg-gray-100 dark:bg-gray-900"
               />
