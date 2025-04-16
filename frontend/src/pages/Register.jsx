@@ -43,7 +43,7 @@ const Register = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-100 text-gray-900 dark:bg-[#1e1e2e] dark:text-white">
+    <div className="flex flex-col min-h-screen pt-12 bg-gray-100 text-gray-900 dark:bg-[#1e1e2e] dark:text-white">
       <div className="min-h-screen flex items-center justify-center bg-gray-100 text-gray-900 dark:bg-[#1e1e2e] dark:text-white">
         <div className="bg-white p-8 rounded-lg shadow-lg w-96 dark:bg-[#2a2a3c]">
           <h1 className="text-2xl font-bold mb-6 text-center">Register</h1>
@@ -92,6 +92,17 @@ const Register = () => {
               Register
             </button>
           </form>
+          <div className="my-4 text-center">
+            <p className="text-gray-700 dark:text-gray-300">
+              Already registered?{" "}
+              <a
+                href="/login"
+                className="text-blue-600 hover:underline dark:text-orange-400"
+              >
+                Login here
+              </a>
+            </p>
+          </div>
         </div>
       </div>
       <Footer />

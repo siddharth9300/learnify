@@ -15,6 +15,7 @@ const Courses = () => {
   const [deleteCourseId, setDeleteCourseId] = useState(null);
   const [deleteInput, setDeleteInput] = useState("");
   const role = localStorage.getItem("role");
+  const [user, setUser] = useState(null);
   const navigate = useNavigate();
   const [refreshEnrolledCourses, setRefreshEnrolledCourses] = useState(false);
 
@@ -25,6 +26,26 @@ const Courses = () => {
         setCourses(result.data);
       } catch (error) {
         toast.error("Failed to fetch courses.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const fetchProfile = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+        const result = await axios.get(`${SERVER_URL}/api/users/profile`, config);
+        setUser(result.data);
+        toast.dismiss();
+        toast.success("Profile fetched successfully!");
+      } catch (error) {
+        toast.dismiss();
+        toast.error("Error fetching profile: " + (error.response?.data?.message || "Unknown error"));
       } finally {
         setLoading(false);
       }
@@ -42,6 +63,7 @@ const Courses = () => {
       }
     };
 
+    fetchProfile();
     fetchCourses();
     fetchEnrolledCourses();
     console.log("useEffect triggered");
@@ -95,8 +117,8 @@ const Courses = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-100 text-gray-900 dark:bg-[#1e1e2e] dark:text-white">
-        <p className="text-lg animate-pulse">Loading courses...</p>
-      </div>
+      <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 border-solid dark:border-orange-500"></div>
+    </div>
     );
   }
 
@@ -155,16 +177,23 @@ const Courses = () => {
                   )
                 )}
 
-                {role === "instructor" && (
+                {role === "instructor" && course.createdBy.email === user?.email && (
                   <div className="mt-4 space-y-2">
                     <button
-                      onClick={(e) => { e.stopPropagation(); navigate(`/update-course/${course._id}`); }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        navigate(`/update-course/${course._id}`);
+                      }}
                       className="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-lg w-full transition"
                     >
                       Update Course
                     </button>
                     <button
-                      onClick={(e) => { e.stopPropagation(); setDeleteCourseId(course._id); setShowModal(true); }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setDeleteCourseId(course._id);
+                        setShowModal(true);
+                      }}
                       className="bg-red-600 hover:bg-red-700 text-white p-2 rounded-lg w-full transition"
                     >
                       Delete Course

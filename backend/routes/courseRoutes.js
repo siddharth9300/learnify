@@ -11,6 +11,7 @@ const {
   getLectures,
   addLecture,
   getCourse,
+  deleteLecture,
 } = require("../controllers/courseController");
 const { protect } = require("../middleware/authMiddleware");
 
@@ -27,5 +28,6 @@ router.post("/enroll", protect, enroll); // Enroll in a course
 router.post("/unenroll", protect, unenroll); // Unenroll from a course
 router.get("/:courseId/lectures", protect, getLectures); // Fetch lectures for a course
 router.post("/:courseId/lectures", protect, upload.single("video"), addLecture); // Add a lecture to a course
+router.delete('/:courseId/lectures/:lectureId', protect, deleteLecture); // Delete a lecture from a course
 
 module.exports = router;

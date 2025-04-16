@@ -1,5 +1,8 @@
 const Course = require('../models/Course');
 const User = require('../models/User');
+const fs = require('fs'); // Add this at the top if not already present
+
+// Ensure there are no unintended CSS syntax issues in this file. No changes to the logic are needed.
 
 // Fetch all courses
 const getCourses = async (req, res) => {
@@ -107,11 +110,18 @@ exports.addCourse = async (req, res) => {
 exports.updateCourse = async (req, res) => {
   const { title, description, category, duration, videos, thumbnail } = req.body;
   const courseId = req.params.courseId;
+  const instructorId = req.user.id;
 
   try {
     const course = await Course.findById(courseId);
+
     if (!course) {
       return res.status(404).json({ message: "Course not found" });
+    }
+
+    // Ensure only the instructor who created the course can update it
+    if (course.createdBy.toString() !== instructorId) {
+      return res.status(403).json({ message: "You are not authorized to update this course" });
     }
 
     course.title = title || course.title;
@@ -143,6 +153,39 @@ exports.deleteCourse = async (req, res) => {
 
     await course.deleteOne();
     res.status(200).json({ message: 'Course deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+// Delete a lecture from a course
+exports.deleteLecture = async (req, res) => {
+  const { courseId, lectureId } = req.params;
+
+  try {
+    const course = await Course.findById(courseId);
+    if (!course) {
+      return res.status(404).json({ message: 'Course not found' });
+    }
+
+    const lectureIndex = course.lectures.findIndex(
+      (lecture) => lecture._id.toString() === lectureId
+    );
+
+
+    const deletedLecture = course.lectures.splice(lectureIndex, 1)[0];
+    await course.save();
+
+    // Delete the lecture video from the uploads folder
+    if (deletedLecture.videoUrl) {
+      fs.unlink(deletedLecture.videoUrl, (err) => {
+        if (err) {
+          console.error(`Failed to delete file: ${deletedLecture.videoUrl}`, err);
+        }
+      });
+    }
+
+    res.status(200).json({ message: 'Lecture deleted successfully' });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

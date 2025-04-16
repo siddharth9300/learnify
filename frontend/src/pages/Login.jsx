@@ -3,8 +3,10 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
-// const PORT = import.meta.env.VITE_PORT || 5000;
-const SERVER_URL = import.meta.env.VITE_SERVER_URL;const Login = () => {
+
+const SERVER_URL = import.meta.env.VITE_SERVER_URL;
+
+const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -62,9 +64,20 @@ const SERVER_URL = import.meta.env.VITE_SERVER_URL;const Login = () => {
               Login
             </button>
           </form>
+          <div className="my-4 text-center">
+            <p className="text-gray-700 dark:text-gray-300">
+              Not registered yet?{" "}
+              <a
+                href="/register"
+                className="text-blue-600 hover:underline dark:text-orange-400"
+              >
+                Register here
+              </a>
+            </p>
+          </div>
         </div>
       </div>
-      <Footer/>
+      <Footer />
     </div>
   );
 };

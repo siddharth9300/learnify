@@ -29,8 +29,8 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="fixed w-full bg-white shadow-lg border-b border-gray-200 dark:bg-gray-900 dark:border-gray-700">
-      <div className="flex justify-between items-center max-w-7xl mx-auto px-6 py-4">
+    <nav className="fixed w-full bg-white z-30 shadow-lg border-b border-gray-200 dark:bg-gray-900 dark:border-gray-700">
+      <div className="flex justify-between items-center max-w-7xl mx-auto px-6 py-2">
         {/* <Link
           to="/"
           className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500 dark:from-orange-400 dark:to-yellow-300"
@@ -85,7 +85,7 @@ const Navbar = () => {
             </li>
           )}
 
-          {token && role !== "instructor" && (
+          {token && (
             <li>
               <Link
                 to="/dashboard"

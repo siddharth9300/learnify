@@ -20,7 +20,13 @@ const SERVER_URL = import.meta.env.VITE_SERVER_URL;const UserDetails = () => {
     fetchUser();
   }, [userId]);
 
-  if (!user) return <div className="text-white text-center mt-10">Loading...</div>;
+  if (!user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100 text-gray-900 dark:bg-[#1e1e2e] dark:text-white">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 border-solid dark:border-orange-500"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-md mx-auto p-6 bg-[#2a2a3c] rounded-lg shadow-lg text-white">

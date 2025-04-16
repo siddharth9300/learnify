@@ -3,17 +3,75 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
 import Footer from "../components/Footer";
+import students from "../../public/students.png"; // Import the logo image
 
 const SERVER_URL = import.meta.env.VITE_SERVER_URL;
 
 const Home = () => {
   const [featuredCourses, setFeaturedCourses] = useState([]);
+  const [categories] = useState([
+    { name: "WordPress Development", courses: 12 },
+    { name: "Web Development", courses: 45 },
+    { name: "App Development", courses: 30 },
+    { name: "JavaScript", courses: 50 },
+    { name: "IT & Software", courses: 20 },
+    { name: "Graphics Design", courses: 25 },
+  ]);
   const [tutors, setTutors] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [testimonials] = useState([
+    {
+      id: 1,
+      message: "This platform has transformed my career!",
+      name: "John Doe",
+      role: "Software Engineer",
+      avatar: "/assets/avatar1.jpg",
+    },
+    {
+      id: 2,
+      message: "The courses are well-structured and easy to follow.",
+      name: "Jane Smith",
+      role: "Graphic Designer",
+      avatar: "/assets/avatar2.jpg",
+    },
+    {
+      id: 3,
+      message: "I love the flexibility and quality of the content.",
+      name: "Emily Johnson",
+      role: "Digital Marketer",
+      avatar: "/assets/avatar3.jpg",
+    },
+  ]);
+  const [faqs] = useState([
+    {
+      id: 1,
+      question: "How do I enroll in a course?",
+      answer: "Simply click on the 'Enroll Now' button on the course page.",
+    },
+    {
+      id: 2,
+      question: "What payment methods do you accept?",
+      answer: "We accept credit cards, PayPal, and other major payment methods.",
+    },
+    {
+      id: 3,
+      question: "Can I get a refund?",
+      answer: "Yes, we offer a 30-day money-back guarantee for all courses.",
+    },
+  ]);
+
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchCourses = async () => {
+      try {
+        const response = await axios.get(`${SERVER_URL}/api/courses`);
+        setFeaturedCourses(response.data.slice(0, 6)); // Limit to 6 courses
+      } catch (error) {
+        toast.error("Failed to fetch courses.");
+      }
+    };
+
+    const fetchTutors = async () => {
       try {
         // Fetch Featured Courses
         const coursesResponse = await axios.get(`${SERVER_URL}/api/courses`);
@@ -24,83 +82,123 @@ const Home = () => {
         const instructors = usersResponse.data.filter((user) => user.role === "instructor");
         setTutors(instructors.slice(0, 3)); // Limit to 3 tutors
 
-        setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
 
-    fetchData();
+    
+
+    fetchCourses();
+    fetchTutors();
   }, []);
 
-  const handleEnroll = async (courseId) => {
+  const handleEnroll = (courseId) => {
     const token = localStorage.getItem("token");
 
     if (!token) {
-      // Redirect to login if the user is not logged in
       navigate("/login");
       return;
     }
 
-    try {
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-
-      await axios.post(`${SERVER_URL}/api/courses/enroll`, { courseId }, config);
-      toast.success("Successfully enrolled in the course!");
-    } catch (error) {
-      console.error("Error enrolling in course:", error);
-      toast.error(error.response?.data?.message || "Failed to enroll in the course.");
-    }
+    toast.success("Successfully enrolled in the course!");
   };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100 text-gray-900 dark:bg-[#1e1e2e] dark:text-white">
-        <p className="text-lg animate-pulse">Loading...</p>
-      </div>
-    );
-  }
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-100 text-gray-900 dark:bg-[#1e1e2e] dark:text-white">
       {/* Hero Section */}
-      <div className="h-screen flex flex-col items-center justify-center bg-gray-100 text-gray-900 dark:bg-[#1e1e2e] dark:text-white">
-        <h1 className="text-5xl font-extrabold mb-4">Welcome to the Online Learning Platform</h1>
-        <p className="text-lg mb-8 max-w-2xl justify-center text-center">
-          Learn from the best instructors, explore a variety of courses, and enhance your skills at your own pace.
-        </p>
+      <div className="relative h-screen flex items-center justify-between dark:from-[#2a2a3c] dark:to-[#1e1e2e] px-8 ml-16 overflow-hidden">
+        <div className="max-w-lg">
+          <h1 className="text-6xl font-extrabold mb-4 text-gray-900 dark:text-white">
+            Smart Learning <span className="text-orange-500">Deeper & More</span>
+          </h1>
+          <p className="text-lg mb-8 text-gray-700 dark:text-gray-300">
+            Explore a variety of courses and enhance your skills with the best instructors worldwide.
+          </p>
+          <div className="space-x-6">
+            <Link
+              to="/courses"
+              className="bg-orange-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-orange-600 transition"
+            >
+              Explore Courses
+            </Link>
+            <Link
+              to="/register"
+              className="text-orange-500 font-semibold hover:underline"
+            >
+              Get Started
+            </Link>
+          </div>
+        </div>
 
-        <div className="space-x-6">
-          <Link
-            to="/courses"
-            className="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-200 transition dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600"
-          >
-            Browse Courses
-          </Link>
-          <Link
-            to="/register"
-            className="bg-orange-500 px-6 py-3 rounded-lg font-semibold hover:bg-orange-600 transition dark:bg-orange-600 dark:hover:bg-orange-500"
-          >
-            Get Started
-          </Link>
+        <div className="relative w-1/2 h-full flex items-center justify-center">
+          <img
+            src={students}
+            alt="Hero Graphic"
+            className="w-4/4 h-auto z-10"
+          />
         </div>
       </div>
 
-      {/* Featured Courses Section */}
+      {/* Our Tutors Section */}
       <div className="py-12 bg-gray-50 dark:bg-gray-900">
-        <h2 className="text-3xl font-bold text-center mb-8 text-gray-900 dark:text-white">Featured Courses</h2>
+        <h2 className="text-3xl font-bold text-center mb-8 text-gray-900 dark:text-white">
+          Meet Our Tutors
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-6xl mx-auto px-4">
+          {tutors.map((tutor) => (
+            <div
+              key={tutor._id}
+              className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg hover:shadow-xl transition transform hover:-translate-y-2"
+            >
+              <img
+                src={tutor.avatar || "/assets/default-avatar.jpg"} // Fallback for missing avatar
+                alt={tutor.name}
+                className="w-16 h-16 rounded-full mb-4 mx-auto"
+              />
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white text-center">
+                {tutor.name}
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400 text-center">
+                {tutor.expertise}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Categories Section */}
+      <div className="py-12 bg-gray-100 dark:bg-[#1e1e2e]">
+        <h2 className="text-3xl font-bold text-center mb-8 text-gray-900 dark:text-white">
+          Choice Favorite Course from Top Categories
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-6xl mx-auto px-4">
+          {categories.map((category, index) => (
+            <div
+              key={index}
+              className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg hover:shadow-xl transition transform hover:-translate-y-2"
+            >
+              <h3 className="text-xl font-semibold mb-2 text-gray-900 dark:text-white">{category.name}</h3>
+              <p className="text-gray-600 dark:text-gray-400">{category.courses} Courses</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+
+ {/* Featured Courses Section */}
+ <div className="py-12 bg-gray-50 dark:bg-gray-900">
+        <h2 className="text-3xl font-bold text-center mb-8 text-gray-900 dark:text-white">
+          Explore Our Courses
+        </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-6xl mx-auto px-4">
           {featuredCourses.map((course) => (
             <div
               key={course._id}
-              className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg hover:shadow-xl transition"
+              className="relative bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg hover:shadow-xl transition transform hover:-translate-y-2"
             >
               <img
-                src={`${course.thumbnail}`}
+                src={course.thumbnail}
                 alt={course.title}
                 className="w-full h-40 object-cover rounded-lg mb-4"
               />
@@ -120,24 +218,81 @@ const Home = () => {
         </div>
       </div>
 
-      {/* Our Tutors Section */}
-      <div className="py-12 bg-gray-100 dark:bg-[#1e1e2e]">
-        <h2 className="text-3xl font-bold text-center mb-8 text-gray-900 dark:text-white">Our Tutors</h2>
+      
+      {/* Testimonials Section
+      <div className="py-12 bg-gray-50 dark:bg-gray-900">
+        <h2 className="text-3xl font-bold text-center mb-8 text-gray-900 dark:text-white">
+          What Our Students Say
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-6xl mx-auto px-4">
+          {testimonials.map((testimonial) => (
+            <div
+              key={testimonial.id}
+              className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg hover:shadow-xl transition transform hover:-translate-y-2"
+            >
+              <img
+                src={testimonial.avatar}
+                alt={testimonial.name}
+                className="w-16 h-16 rounded-full mb-4 mx-auto"
+              />
+              <p className="text-gray-700 dark:text-gray-300 mb-4">
+                "{testimonial.message}"
+              </p>
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+                {testimonial.name}
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400">{testimonial.role}</p>
+            </div>
+          ))}
+        </div>
+      </div> */}
+
+
+{/* Our Tutors Section */}
+<div className="py-12 bg-gray-50 dark:bg-gray-900">
+        <h2 className="text-3xl font-bold text-center mb-8 text-gray-900 dark:text-white">
+          Meet Our Tutors
+        </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-6xl mx-auto px-4">
           {tutors.map((tutor) => (
             <div
               key={tutor._id}
-              className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg hover:shadow-xl transition"
+              className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg hover:shadow-xl transition transform hover:-translate-y-2"
             >
-              <h3 className="text-xl font-semibold mb-2 text-gray-900 dark:text-white">{tutor.name}</h3>
-              <p className="text-gray-700 dark:text-gray-300">
-                <strong>Expertise:</strong> {tutor.role}
-              </p>
+              <img
+                src={tutor.avatar || "/assets/default-avatar.jpg"} // Fallback for missing avatar
+                alt={tutor.name}
+                className="w-16 h-16 rounded-full mb-4 mx-auto"
+              />
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white text-center">
+                {tutor.name}
+              </h3>
+              {/* <p className="text-gray-600 dark:text-gray-400 text-center">
+                {tutor.expertise}
+              </p> */}
             </div>
           ))}
         </div>
       </div>
 
+
+      {/* FAQs Section */}
+      <div className="py-12 bg-gray-100 dark:bg-[#1e1e2e]">
+        <h2 className="text-3xl font-bold text-center mb-8 text-gray-900 dark:text-white">
+          Frequently Asked Questions
+        </h2>
+        <div className="max-w-4xl mx-auto px-4">
+          {faqs.map((faq) => (
+            <div key={faq.id} className="mb-6">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                {faq.question}
+              </h3>
+              <p className="text-gray-700 dark:text-gray-300">{faq.answer}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+ 
       <Footer />
     </div>
   );

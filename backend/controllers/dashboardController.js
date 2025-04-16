@@ -32,3 +32,28 @@ exports.getDashboardData = async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 };
+
+exports.getInstructorDashboardData = async (req, res) => {
+  try {
+    const instructorId = req.user.id;
+
+    // Fetch courses created by the instructor
+    const courses = await Course.find({ createdBy: instructorId }).populate("lectures");
+
+    // Calculate the total number of students enrolled in the instructor's courses
+    const totalStudents = await User.countDocuments({
+      enrolledCourses: { $in: courses.map((course) => course._id) },
+    });
+
+    const totalCourses = courses.length;
+
+    res.status(200).json({
+      totalStudents,
+      totalCourses,
+      courses,
+    });
+  } catch (err) {
+    console.error("Error fetching instructor dashboard data:", err);
+    res.status(500).json({ message: err.message });
+  }
+};
