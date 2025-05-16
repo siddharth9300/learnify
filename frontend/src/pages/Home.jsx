@@ -260,7 +260,7 @@ const Home = () => {
               className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg hover:shadow-xl transition transform hover:-translate-y-2"
             >
               <img
-                src={tutor.avatar || {avtar}} // Fallback for missing avatar
+                src={avtar} // Fallback for missing avatar
                 alt={tutor.name}
                 className="w-16 h-16 rounded-full mb-4 mx-auto"
               />
