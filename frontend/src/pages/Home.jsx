@@ -139,8 +139,7 @@ const Home = () => {
           />
         </div>
       </div>
-
-      {/* Our Tutors Section */}
+{/* 
       <div className="py-12 bg-gray-50 dark:bg-gray-900">
         <h2 className="text-3xl font-bold text-center mb-8 text-gray-900 dark:text-white">
           Meet Our Tutors
@@ -167,7 +166,7 @@ const Home = () => {
         </div>
       </div>
 
-      {/* Categories Section */}
+       
       <div className="py-12 bg-gray-100 dark:bg-[#1e1e2e]">
         <h2 className="text-3xl font-bold text-center mb-8 text-gray-900 dark:text-white">
           Choice Favorite Course from Top Categories
@@ -184,7 +183,7 @@ const Home = () => {
           ))}
         </div>
       </div>
-
+*/}
 
  {/* Featured Courses Section */}
  <div className="py-12 bg-gray-50 dark:bg-gray-900">
