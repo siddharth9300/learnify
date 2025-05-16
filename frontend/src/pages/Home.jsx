@@ -4,6 +4,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import Footer from "../components/Footer";
 import students from "../../public/students.png"; // Import the logo image
+import avtar from "../../public/avtar.png"; // Import the logo image
 
 const SERVER_URL = import.meta.env.VITE_SERVER_URL;
 
@@ -259,7 +260,7 @@ const Home = () => {
               className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg hover:shadow-xl transition transform hover:-translate-y-2"
             >
               <img
-                src={tutor.avatar || "/assets/default-avatar.jpg"} // Fallback for missing avatar
+                src={tutor.avatar || {avtar}} // Fallback for missing avatar
                 alt={tutor.name}
                 className="w-16 h-16 rounded-full mb-4 mx-auto"
               />
